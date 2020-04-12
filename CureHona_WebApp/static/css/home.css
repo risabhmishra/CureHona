@@ -1,0 +1,13 @@
+.option{
+	background-color: #4683A5;
+	height: 160px;
+}
+.option-btn{
+	/*margin-top: 15%;*/
+	font-size: 2rem;
+	background-color: none;
+	color: white;
+}
+.link{
+	text-decoration: none;
+}

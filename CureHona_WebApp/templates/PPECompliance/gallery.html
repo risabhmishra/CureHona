@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+	All Images
+{% endblock %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/zoom.css' %}">
+
+{% endblock %}
+
+{% block ShowImage %}
+<div class="container">
+
+	<table class="table mt-2 border" id="table-content">
+		<tbody>
+			<thead class="thead-dark">
+			<tr>
+				<th class="align-middle">
+					Original Image
+				</th>
+				<th class="align-middle">
+					<center>PPE Compliance Image</center>
+				</th>
+				
+				<th class="align-middle">
+					<a href="{% url 'delete_all_image_ppe' %}"><button class="ml-2 btn btn-danger">Delete All</button>
+				</th>
+			</tr>
+			</thead>
+			{% for image in Images %}
+			<tr id="{{image.pk_ppe_compliance}}">
+				<td class="align-middle">
+					<img class="image" height="300" width="300" onclick="preview(this.src)" src="{{MEDIA_URL}}{{image.fk_image.image}}" />
+				</td>
+				<td class="align-middle">
+				 <center>
+				 	{% if image.result_image|slugify|length > 0 %}
+
+						<img class="image" height="300" width="300" onclick="preview(this.src)" src="{{MEDIA_URL}}{{image.result_image}}"/>
+					{% else %}
+					Image does not contain discernible data.
+					{% endif %}
+				 </center>
+				</td>
+				<td class="align-middle">
+
+                    <a href="{% url 'delete_image_list_ppe' image.fk_image.pk_image 'gallery_ppe' %}"><button class="btn btn-warning">Remove</button></a>
+
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+<!-- The Modal -->
+	<div id="myModal" class="modal">
+	  <span class="close">&times;</span>
+	  <img class="modal-content" id="img01">
+	</div>
+	</div>
+
+<script src="{% static 'js/zoom.js' %}"></script>
+
+{% endblock %}

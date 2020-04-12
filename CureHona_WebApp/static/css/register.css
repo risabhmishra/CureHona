@@ -1,0 +1,18 @@
+#id_username{
+	width:100%;
+}
+#id_password1{
+	width:100%;
+}
+#id_password2{
+	width:500px;
+}
+.container{
+	width:70%;
+}
+small{
+	color: grey;
+}
+.error-text{
+	color: red;
+}

@@ -1,0 +1,30 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<style>
+  #id_username{
+    width:100%;
+  }
+  #id_password{
+      width:100%;
+  }
+
+</style>
+<div class="container mt-4" style="width:50%;">
+  <h4>Login</h4>
+  <form method="post">
+    {% csrf_token %}
+    <label>Username</label><input class="form-control" type="text" name="Username"><br>
+      <label>Password</label><input class="form-control" type="password" name="Password">
+    <button type="submit" class="btn mt-2 btn-primary mx-auto">Login</button><br>
+    <small><a href="{% url 'register' %}">Don't have an account ? click here to register.</a></small>
+  </form>
+
+</div>
+
+{% endblock %}

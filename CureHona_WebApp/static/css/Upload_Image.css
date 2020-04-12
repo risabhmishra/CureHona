@@ -1,0 +1,61 @@
+.example {
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+#drop_zone {
+	border: 2px dashed #bbb;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	padding: 25px;
+	text-align: center;
+	font: 20pt bold'Vollkorn';
+	color: #bbb;
+	top: 50%;
+	height: 400px;
+}
+#drop_zone:hover{
+	background-color: gray;
+	opacity: 0.4;
+}
+#drop_caption{
+	margin-top: 15%;
+	border: 2px dashed #bbb; 
+	padding: 2%;
+	width: 50%;
+}
+#hidden_file_names{
+	display: none;
+}
+#loading_caption{
+	display: none;
+	color: #909294;
+}
+/*loader*/
+
+.loader {
+  border: 8px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 8px solid #627685;
+  width: 120px;
+  height: 120px;
+  margin-top: 15%;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  display: none;
+  margin-bottom: 15%;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/*end loader*/

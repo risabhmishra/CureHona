@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Upload Image
+{% endblock %}
+
+{% block uploadImage %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/Upload_Image.css' %}">
+
+<div class="container mt-4">
+	<center><h4>PPE</h4></center>
+		<div class="example">
+			<center>
+				<div class="loader"></div>
+				<span id="loading_caption">Uploading...</span>
+			</center>
+			<div id="upload_image_ui">
+			<div id="drop_zone" class="container-fluid">
+				<div id="drop_caption" class="mx-auto">Drop files here</div>
+			</div>				
+			<form id="upload_image_form" method="post" action="" enctype="multipart/form-data" >
+				{% csrf_token %}
+				Select images: <input id="UploadFile" class="form-control" type="file" name="img" accept="image/*" multiple required>
+				<span id="fileInfo"></span>
+				<small>
+					<span id="show_all_filename" onclick="show_all_filename()"><a href="#">Show more</a></span>
+					<span id="hide_all_filename" onclick="hide_all_filename()"><a href="#">Hide</a></span>
+				</small>
+				<br>
+				<button type="submit" class="btn btn-primary m-1">Upload</button>
+			</form>
+		  </div>
+		</div>
+</div>
+
+<script src="{% static 'js/FileInfo.js' %}"></script>
+<script src="{% static 'js/Drag_and_Drop.js' %}" ></script>
+<script src="{% static 'js/ControlFileName.js' %}"></script>
+
+{% endblock %}

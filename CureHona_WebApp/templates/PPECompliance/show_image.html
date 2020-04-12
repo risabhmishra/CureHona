@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+	All Images
+{% endblock %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/zoom.css' %}">
+
+{% endblock %}
+
+{% block ShowImage %}
+<div class="container">
+	<table class="table" id="table-content">
+		<tbody>
+			<tr>
+				<th>
+					Original Image
+				</th>
+				<th>
+					<center>PPE Compliance Image</center>
+				</th>
+				<th>
+					Action 
+				</th>
+			</tr>
+			{% for image in allImages %}
+			<tr id="{{image.pk_ppe_compliance}}">
+				<td>
+					<img class="image"  height="300" width="300" onclick="preview(this.src)" src="/media/{{image.fk_image.image}}" />
+				</td>
+				<td>
+				 <center>
+				 	{% if image.result_image|slugify|length > 0 %}
+						<img class="image" height="300" width="300" onclick="preview(this.src)" src="/media/{{image.result_image}}"/>
+					{% else %}
+					Image does not contain any discernible information
+					{% endif %}
+				 </center>
+				</td>
+
+				<td>
+                    <a href="{% url 'delete_image_list_ppe' image.fk_image.pk_image 'show_all_images_ppe' %}"><button class="btn btn-warning">Remove</button></a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+<div id="myModal" class="modal" >
+	  <span class="close">&times;</span>
+	  <img class="modal-content" id="img01">
+	</div>
+	</div>
+
+<script src="{% static 'js/zoom.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/show_image.js' %}"></script>
+{% endblock %}
