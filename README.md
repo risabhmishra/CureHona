@@ -25,6 +25,12 @@
 3. For running Object Detection on images present inside data directory, run : python3 Main_tf2.py
 4. For running Object Detection & Tracking on the configured video_path/camera path run : python3 Main_tf_video.py
 
+## Modify settings :
+1. The database username and password must be set before running the web app.
+2. cd CureHona_WebApp/CureHona_WebApp
+3. open the __settings.py__ file and change the username and password in "DATABASES".
+4. Specify the username and password that was set for the database.
+
 ## CureHona WebApp :
 1. cd revisions
 2. createdb code19
