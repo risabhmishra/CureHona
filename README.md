@@ -40,7 +40,7 @@ The webapp is created for easy demo purpose of object detector code, where a use
 
 # DB Schema : 
 
-
+![image](https://user-images.githubusercontent.com/21499789/79097322-1a121c80-7d7d-11ea-931c-b6f778d64479.png)
 
 # Screenshots : 
 
