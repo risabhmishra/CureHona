@@ -1,113 +1,61 @@
 import numpy as np
+import tensorflow as tf
 import cv2 as cv
-import concurrent.futures
-import imutils
-from imutils.video import VideoStream
-
 import configparser
-import multiprocessing
+import os
 
-from PPE_ObjectDetector import PPE_ObjectDetector
-from PPE_ObjectTracker_dlib import PPE_ObjectTracker
+label_map = {1:"person",2:"Mask"}
 
+# Config Parser for Getting Values from Main_Config file
 
-if __name__=='__main__':
+configParser = configparser.RawConfigParser()
+configParser.readfp(open(r'Config/Main_Config.ini'))
 
-    # Config Parser for Getting Values from Main_Config file
+tf_graph_filepath = configParser.get('OBJECT_DETECTION', 'TF_GRAPH_FILE_PATH')
 
-    configParser = configparser.RawConfigParser()
-    configParser.readfp(open(r'Config/Main_Config.ini'))
+files = os.listdir('./data')
 
+# Read the graph.
+with tf.gfile.FastGFile(tf_graph_filepath, 'rb') as f:
+    graph_def = tf.GraphDef()
+    graph_def.ParseFromString(f.read())
 
+with tf.Session() as sess:
+    # Restore session
+    sess.graph.as_default()
+    tf.import_graph_def(graph_def, name='')
 
+    for file in files:
+        # Read and preprocess an image.
+        print('./data/{0}'.format(file))
+        img = cv.imread('./data/{0}'.format(file))
+        rows = img.shape[0]
+        cols = img.shape[1]
+        inp = cv.resize(img, (300, 300))
+        inp = inp[:, :, [2, 1, 0]]  # BGR2RGB
 
-    tf_graph_filepath = configParser.get('OBJECT_DETECTION', 'TF_GRAPH_FILE_PATH')
-    input_video_path = configParser.get('OBJECT_DETECTION', 'INPUT_VIDEO_PATH')
+        # Run the model
+        out = sess.run([sess.graph.get_tensor_by_name('num_detections:0'),
+                        sess.graph.get_tensor_by_name('detection_scores:0'),
+                        sess.graph.get_tensor_by_name('detection_boxes:0'),
+                        sess.graph.get_tensor_by_name('detection_classes:0')],
+                       feed_dict={'image_tensor:0': inp.reshape(1, inp.shape[0], inp.shape[1], 3)})
 
-    track_length = configParser.get('OBJECT_TRACKING', 'TRACK_LENGTH')
-    haar_cascade_filepath = configParser.get('OBJECT_DETECTION','HAAR_CASCADE_FILE_PATH')
-
-
-    # q = multiprocessing.Queue()
-    #
-    # process_object_detection = multiprocessing.Process(target=object_detect,args=(tf_graph_filepath,input_video_path,q))
-    # process_object_tracking = multiprocessing.Process(target=object_track,args=(q,))
-    #
-    # process_object_detection.start()
-    # process_object_tracking.start()
-    #
-    # process_object_detection.join()
-    # process_object_tracking.join()
-
-
-
-    object_detector = PPE_ObjectDetector()
-    object_detector.read_graph(tf_graph_filepath)
-
-    object_tracker = PPE_ObjectTracker(track_length)
-
-    cap = cv.VideoCapture(input_video_path)
-
-    label_count = {}
-    max_id = -1
-
-    img = cv.imread('./data/08jpg')
-
-    face_cascade = cv.CascadeClassifier(haar_cascade_filepath)
-
-    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-
-    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
-
-
-    object_detector.preprocess_image(img)
-
-    object_detector.object_detect()
-
-    rects = object_detector.postprocess_image()
-
-    print(rects)
-
-    # for face in faces:
-    #     rects.append((face[0],face[1],face[2],face[3],'Without Mask'))
-
-    objects = object_tracker.update(img, rects)
+        # Visualize detected bounding boxes.
+        num_detections = int(out[0][0])
+        for i in range(num_detections):
+            classId = int(out[3][0][i])
+            score = float(out[1][0][i])
+            bbox = [float(v) for v in out[2][0][i]]
+            if score > 0.3:
+                x = bbox[1] * cols
+                y = bbox[0] * rows
+                right = bbox[3] * cols
+                bottom = bbox[2] * rows
+                cv.rectangle(img, (int(x), int(y)), (int(right), int(bottom)), (125, 255, 51), thickness=2)
+                cv.putText(img, label_map[classId], (round(x), round(y - 10)), cv.FONT_HERSHEY_SIMPLEX, 0.5,
+                           (0, 0, 255))
+        cv.imshow('TensorFlow Personnel Protective Equipment Compliance', img)
+        cv.waitKey()
 
 
-    print("Objects for Tracking", objects)
-
-    if objects:
-
-        for (id, object) in objects.items():
-            # draw both the ID of the object and the centroid of the
-            # object on the output frame
-            print(id, object[0], object[1])
-
-            if not object[0] in label_count:
-                print("New Class Count")
-                label_count[object[0]] = 1
-                max_id = id
-            elif object[0] in label_count and id > max_id:
-                print("Update Class Count")
-                label_count[object[0]] += 1
-                max_id = id
-
-            pos = object[1].get_position()
-            # unpack the position object
-            startX = int(pos.left())
-            startY = int(pos.top())
-            endX = int(pos.right())
-            endY = int(pos.bottom())
-
-            cv.rectangle(img, (startX, startY), (endX, endY), (0, 255, 0), thickness=2)
-            cv.putText(img, "{0}-{1}".format(object[0],id),(round(startX + 10), round(endY - 10)), cv.FONT_ITALIC, 0.7, (255,0, 0), 1)
-
-        #show the output frame
-        print(label_count)
-        print(max_id)
-        cv.putText(img,str(label_count),(10,500),cv.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
-        cv.imshow("Frame", img)
-
-
-    cv.imshow("Frame", img)
-    cv.waitKey()

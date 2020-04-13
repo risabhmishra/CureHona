@@ -30,9 +30,10 @@
 2. createdb code19
 3. psql -d code19 -f 0001.sql
 4. cd CureHona_WebApp
-5. python3 manage.py makemigrations
-6. python3 manage.py migrate
-7. python3 manage.py runserver
+5. cd PPECompliance/Code/Config and configure the inference_graph path in Main_Config.ini file.
+6. python3 manage.py makemigrations
+7. python3 manage.py migrate
+8. python3 manage.py runserver
 
 After running all the above mentioned commands, you will be able to access the webapp in your browser,
 Go to the url : http://127.0.0.1:8000

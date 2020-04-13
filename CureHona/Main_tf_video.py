@@ -46,7 +46,10 @@ if __name__=='__main__':
     object_tracker = PPE_ObjectTracker(track_length)
 
     cap = cv.VideoCapture(input_video_path)
-    out = cv.VideoWriter('output10.avi', cv.VideoWriter_fourcc('D', 'I', 'V', 'X'), 15, (600, 600), 1)
+
+    output_video_filename = input_video_path.split('/')[-1].split('.')[0] + '_output.avi'
+
+    out = cv.VideoWriter(output_video_filename, cv.VideoWriter_fourcc('D', 'I', 'V', 'X'), 15, (600, 600), 1)
 
 
     label_count = {}
