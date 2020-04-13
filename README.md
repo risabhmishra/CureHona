@@ -51,6 +51,6 @@ The webapp is created for easy demo purpose of object detector code, where a use
 
 # Screenshots : 
 
-![image](https://user-images.githubusercontent.com/21499789/79098622-03b99000-7d80-11ea-97f1-73ea8e2740d0.png)
+![image](https://user-images.githubusercontent.com/21499789/79114770-c108af80-7da1-11ea-9682-767af68f587a.png)
 
-![image](https://user-images.githubusercontent.com/21499789/79098677-1fbd3180-7d80-11ea-8bfc-9f93cd865e77.png)
+![image](https://user-images.githubusercontent.com/21499789/79114869-03ca8780-7da2-11ea-83d6-439645fc8289.png)
